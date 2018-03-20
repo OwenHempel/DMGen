@@ -1,0 +1,15 @@
+{% if MyTowns %}
+    <ul>
+    {% for Town in MyTowns %}
+        <li><a href="{% url 'Towns:Towndetail'  Town.id%}">{{ Town }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Towns are available.</p>
+
+{% endif %}
+<form action="{% url 'Towns:Generate'%}" method="post">
+{% csrf_token %}
+{{form}}
+<input type="submit" value="Generate" />
+</form>

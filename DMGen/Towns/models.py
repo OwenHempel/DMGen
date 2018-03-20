@@ -44,6 +44,8 @@ class NPC(models.Model):
 	Age = models.ForeignKey(Age, blank = True, default = '', on_delete = models.SET_DEFAULT)
 	Appearance = models.ManyToManyField(Appearance)
 	Personality = models.ManyToManyField(Personality)
+	def __str__(self):
+		return "{} {}".format(self.FirstName.NameText, self.LastName.NameText)
 
 class ShopType(models.Model):
 	Type = models.CharField(max_length = 15)
@@ -79,15 +81,23 @@ class Item(models.Model):
 	Effect = models.ManyToManyField(ItemEffect)
 	Attunement = models.BooleanField(default = False)
 	Rarity = models.CharField(max_length = 15)
+	def __str__(self):
+		return "{}, {}".format(self.Name, self.Type)	
 
 class Shop(models.Model):
 	Owner = models.ForeignKey(NPC, blank = True, default = '', on_delete = models.SET_DEFAULT)
 	Balance = models.IntegerField(default = 0)
-	Inventory = models.ManyToManyField(Item)
+	Inventory = models.ManyToManyField(Item, blank = True, null = True)
+	Type = models.ForeignKey(ShopType, default = '', on_delete = models.SET_DEFAULT)
 	FirstName = models.ForeignKey(ShopName, related_name = 'FirstName', blank = True, default = '', on_delete = models.SET_DEFAULT)
 	LastName = models.ForeignKey(ShopName, related_name = 'LastName', blank = True, default = '', on_delete = models.SET_DEFAULT)
+	def __str__(self):
+		return "{} {}".format(self.FirstName, self.LastName)
 
 class Town(models.Model):
 	Shops = models.ManyToManyField(Shop)
 	Residents = models.ManyToManyField(NPC)
+	Name = models.CharField(max_length = 40)
+	def __str__(self):
+		return "{}".format(self.Name)	
 	

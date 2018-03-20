@@ -1,0 +1,11 @@
+<h1>{{ Town.Name }}</h1>
+<ul>
+<h2>Residents</h2>
+{% for NPC in Town.Residents.all %}
+    <li>{{ NPC }}</li>
+{% endfor %}
+<h2>Shops</h2>
+{% for shop in Town.Shops.all %}
+    <li>{{ shop }}</li>
+{% endfor %}
+</ul>
