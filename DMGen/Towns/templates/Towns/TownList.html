@@ -8,6 +8,7 @@
     <p>No Towns are available.</p>
 
 {% endif %}
+<a href="{% url 'Towns:Generate' %}"> Generate something</a>
 <form action="{% url 'Towns:Generate'%}" method="post">
 {% csrf_token %}
 {{form}}
