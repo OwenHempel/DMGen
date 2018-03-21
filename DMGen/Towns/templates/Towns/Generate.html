@@ -1,20 +1,31 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+<title>{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}</title>
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+{% endblock %}
+
+<h1>Generate Town</h1>
 <form action="{% url 'Towns:Generate'%}" method="post">
 {% csrf_token %}
-{{form1}}
+{{form1.as_ul}}
 <input type="submit" value="Generate" />
 </form>
+<h1>Generate NPC</h1>
 <form action="{% url 'Towns:Generate'%}" method="post">
 {% csrf_token %}
-{{form2}}
+{{form2.as_ul}}
 <input type="submit" value="Generate" />
 </form>
+<h1>Generate Shop</h1>
 <form action="{% url 'Towns:Generate'%}" method="post">
 {% csrf_token %}
-{{form3}}
+{{form3.as_ul}}
 <input type="submit" value="Generate" />
 </form>
+<h1>Generate Item</h1>
 <form action="{% url 'Towns:Generate'%}" method="post">
 {% csrf_token %}
-{{form4}}
+{{form4.as_ul}}
 <input type="submit" value="Generate" />
 </form>

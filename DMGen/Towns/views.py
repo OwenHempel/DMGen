@@ -11,8 +11,6 @@ from .forms import TownForm, NPCForm, ItemForm, ShopForm
 def TownList(request):
     template_name = 'Towns/TownList.html'
     context = {}
-    form = TownForm()
-    context['form'] = form
     context['MyTowns'] = Town.objects.all()
     return render(request, template_name, context)
 
@@ -26,11 +24,18 @@ def Generate(request):
         form4 = ItemForm()
         if form1.is_valid():
             T = Town(Name = form1.Name, Shops = form1.Shops, Residents = form1.Residents)
+            T.save()
         if form2.is_valid():
             C = NPC(FirstName = form2.FirstName, LastName = form2.LastName, Race = Form2.Race, Age = form2.Age, Gender = form2.Gender,
             Appearance = form2.Appearance, Personality = form2.Personality)
             C.save()
-        return HttpResponseRedirect(reverse('Towns:Generate', args=()))
+        if form3.is_valid():
+            S = Shop(FirstName = form3.FirstName, LastName = form3.LastName, Owner = form3.Owner, Inventory = form3.Inventory, Balance = form3.Balance, Type = form3.Type)
+            S.save()
+        if form4.is_valid():
+            I = Item()
+            I.save()
+        return HttpResponseRedirect(reverse('Towns:Generate', args = ('')))
     else:   
         form1 = TownForm()
         form2 = NPCForm()
@@ -40,6 +45,7 @@ def Generate(request):
         context['form2'] = form2
         context['form3'] = form3
         context['form4'] = form4
+    context['title'] = 'Generate World Info'
 
     return render(request, template_name, context)
 

@@ -87,7 +87,7 @@ class Item(models.Model):
 class Shop(models.Model):
 	Owner = models.ForeignKey(NPC, blank = True, default = '', on_delete = models.SET_DEFAULT)
 	Balance = models.IntegerField(default = 0)
-	Inventory = models.ManyToManyField(Item, blank = True, null = True)
+	Inventory = models.ManyToManyField(Item, blank = True)
 	Type = models.ForeignKey(ShopType, default = '', on_delete = models.SET_DEFAULT)
 	FirstName = models.ForeignKey(ShopName, related_name = 'FirstName', blank = True, default = '', on_delete = models.SET_DEFAULT)
 	LastName = models.ForeignKey(ShopName, related_name = 'LastName', blank = True, default = '', on_delete = models.SET_DEFAULT)
