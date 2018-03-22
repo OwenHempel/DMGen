@@ -57,7 +57,7 @@ class ShopName(models.Model):
 	Position = models.IntegerField(default = 0)
 	NameText = models.CharField(max_length = 25)
 	def __str__(self):
-		return "{}, {} ({})".format(self.Type, self.NameText, self.Position)
+		return "{}".format(self.NameText)
 
 class ItemType(models.Model):
 	Type = models.CharField(max_length = 30)
@@ -92,7 +92,7 @@ class Shop(models.Model):
 	FirstName = models.ForeignKey(ShopName, related_name = 'FirstName', blank = True, default = '', on_delete = models.SET_DEFAULT)
 	LastName = models.ForeignKey(ShopName, related_name = 'LastName', blank = True, default = '', on_delete = models.SET_DEFAULT)
 	def __str__(self):
-		return "{} {}".format(self.FirstName, self.LastName)
+		return "{}, {} {}".format(self.Type, self.FirstName, self.LastName)
 
 class Town(models.Model):
 	Shops = models.ManyToManyField(Shop)

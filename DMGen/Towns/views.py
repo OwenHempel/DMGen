@@ -12,28 +12,38 @@ def TownList(request):
     template_name = 'Towns/TownList.html'
     context = {}
     context['MyTowns'] = Town.objects.all()
+    context['title'] = 'List of Towns'
     return render(request, template_name, context)
 
 def Generate(request):
     context = {}
     template_name = 'Towns/Generate.html'
     if request.method == 'POST':
-        form1 = TownForm()
-        form2 = NPCForm()
-        form3 = ShopForm()
-        form4 = ItemForm()
+        form1 = TownForm(request.POST)
+        form2 = NPCForm(request.POST)
+        form3 = ShopForm(request.POST)
+        form4 = ItemForm(request.POST)
         if form1.is_valid():
-            T = Town(Name = form1.Name, Shops = form1.Shops, Residents = form1.Residents)
+            T = Town(Name = form1.cleaned_data['Name'])
+            T.save()
+            T.Shops.set(form1.cleaned_data['Shops'])
+            T.Residents.set(form1.cleaned_data['Residents'])
             T.save()
         if form2.is_valid():
-            C = NPC(FirstName = form2.FirstName, LastName = form2.LastName, Race = Form2.Race, Age = form2.Age, Gender = form2.Gender,
-            Appearance = form2.Appearance, Personality = form2.Personality)
+            C = NPC(FirstName = form2.cleaned_data['FirstName'], LastName = form2.cleaned_data['LastName'], Race = form2.cleaned_data['Race'], Age = form2.cleaned_data['Age'], Gender = form2.cleaned_data['Gender'])
+            C.save()
+            C.Appearance.set(form2.cleaned_data['Appearance'])
+            C.Personality.set(form2.cleaned_data['Personality'])
             C.save()
         if form3.is_valid():
-            S = Shop(FirstName = form3.FirstName, LastName = form3.LastName, Owner = form3.Owner, Inventory = form3.Inventory, Balance = form3.Balance, Type = form3.Type)
+            S = Shop(FirstName = form3.cleaned_data['FirstName'], LastName = form3.cleaned_data['LastName'], Owner = form3.cleaned_data['Owner'], Balance = form3.cleaned_data['Balance'], Type = form3.cleaned_data['Type'])
+            S.save()
+            S.Inventory.set(form3.cleaned_data['Inventory'])
             S.save()
         if form4.is_valid():
-            I = Item()
+            I = Item(Name = form4.cleaned_data['Name'], Cost = form4.cleaned_data['Cost'], Type = form4.cleaned_data['Type'])
+            I.save()
+            I.Effect.set(form4.cleaned_data['Effect'])
             I.save()
         return HttpResponseRedirect(reverse('Towns:Generate', args = ('')))
     else:   
@@ -50,7 +60,10 @@ def Generate(request):
     return render(request, template_name, context)
 
 def Towndetail(request, town_id):
+    context = {}
+    context['title'] = 'Town Details'
     sTown = get_object_or_404(Town, pk=town_id)
-    return render(request, 'Towns/TownDetail.html', {'Town': sTown})
+    context['Town'] = sTown
+    return render(request, 'Towns/TownDetail.html', context)
 
 
