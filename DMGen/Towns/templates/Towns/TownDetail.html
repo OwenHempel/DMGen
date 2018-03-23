@@ -15,11 +15,51 @@
 <h1>{{ Town.Name }}</h1>
 <ul>
 <h2>Residents</h2>
+<table>	
+	<tr>
+		<th>Name</th>
+	</tr>
 {% for NPC in Town.Residents.all %}
-    <li>{{ NPC }}</li>
-{% endfor %}
+    <tr>{{ NPC }}</tr>
+{% endfor %}	
+</table>
+
 <h2>Shops</h2>
+<table>	
+	<tr>
+		<th>Shop Name</th>
+		<th>Shop Type</th>
+		<th>Owner</th>
+	</tr>
 {% for shop in Town.Shops.all %}
-    <li>{{ shop }}</li>
+    <tr><td>{{ shop.FirstName }} {{shop.LastName}}</td>
+    <td> {{shop.Type}} </td>
+    <td> {{shop.Owner}}</td>
+    </tr>
+
 {% endfor %}
-</ul>
+</table>
+<form action="{% url 'Towns:Towndetail' Town.id %}" method="post">
+{% csrf_token %}
+
+{% for s in Town.Shops.all %}
+<h2>{{s.FirstName}} {{s.LastName}}</h2>
+<h3>Balance: {{s.Balance}}</h3>
+<h3>Inventory</h3>
+<table>
+	<tr>
+		<th>Item</th>
+		<th>Cost</th>
+		<th></th>
+	</tr>
+	{% for item in s.Inventory.all %}
+		<tr>
+			<td>{{item.Name}}</td>
+			<td>{{item.Cost}}</td>
+			<td><input type="radio" name="{{item.id}}" id="{{s.id}}" value="{{ s.id }}" /></td>
+		</tr>
+	{% endfor %}
+</table>
+<input type="submit" value="Buy" id =" {{item.id}}" />
+{% endfor %}
+</form>

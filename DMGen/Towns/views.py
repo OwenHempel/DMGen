@@ -63,6 +63,17 @@ def Towndetail(request, town_id):
     context = {}
     context['title'] = 'Town Details'
     sTown = get_object_or_404(Town, pk=town_id)
+    if request.method == 'POST':
+        iDict = request.POST.dict()
+        iDict.pop('csrfmiddlewaretoken')
+        for i in iDict:
+            shop = Shop.objects.get(id = int(iDict[i]))
+            item = Item.objects.get(id = int(i))
+            shop.Inventory.remove(item)
+            print(shop.Balance, item.Cost)
+            shop.Balance += item.Cost
+            shop.save()
+
     context['Town'] = sTown
     return render(request, 'Towns/TownDetail.html', context)
 

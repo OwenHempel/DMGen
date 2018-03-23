@@ -12,11 +12,21 @@
 {% endblock %}
 
 {% if MyTowns %}
-    <ul>
+    <table>
+    <tr>
+    	<th>Town Name</th>
+    	<th>Shops</th>
+    </tr>
     {% for Town in MyTowns %}
-        <li><a href="{% url 'Towns:Towndetail'  Town.id%}">{{ Town }}</a></li>
+        <tr>
+        	<td> <a href="{% url 'Towns:Towndetail'  Town.id%}">{{ Town }}</a> </td> 
+        	<td> {% for shop in Town.Shops.all %}
+        		{{shop.Type}}
+        	{% endfor %}</td>
+        </tr>
+
     {% endfor %}
-    </ul>
+	</table>
 {% else %}
     <p>No Towns are available.</p>
 
