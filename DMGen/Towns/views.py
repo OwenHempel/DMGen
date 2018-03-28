@@ -15,6 +15,26 @@ def TownList(request):
     context['title'] = 'List of Towns'
     return render(request, template_name, context)
 
+def modify(request):
+    context = {}
+    context['title'] = 'Modify World Info'
+    template_name = 'Towns/Modify.html'
+    if request.method == 'POST':
+        if 'NPC' in request.POST:
+            npcid = request.POST['NPC']
+            instance = get_object_or_404(NPC, id=npcid)
+            form = NPCForm(instance = instance)
+        elif 'Shop' in request.POST:
+            sid = request.POST['Shop']
+            instance = get_object_or_404(Shop, id=sid)
+            form = ShopForm(instance = instance)
+        elif 'Town' in request.POST:
+            tid = request.POST['Town']
+            instance = get_object_or_404(Town, id=tid)
+            form = TownForm(instance = instance)
+    context['form'] = form
+    return render(request, template_name, context)       
+    
 def Generate(request):
     context = {}
     template_name = 'Towns/Generate.html'
@@ -70,7 +90,6 @@ def Towndetail(request, town_id):
             shop = Shop.objects.get(id = int(iDict[i]))
             item = Item.objects.get(id = int(i))
             shop.Inventory.remove(item)
-            print(shop.Balance, item.Cost)
             shop.Balance += item.Cost
             shop.save()
 

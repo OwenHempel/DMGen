@@ -15,12 +15,18 @@
 <h1>{{ Town.Name }}</h1>
 <ul>
 <h2>Residents</h2>
+<form action="{% url 'Towns:Modify' %}" method="post">
+	{% csrf_token %}
 <table>	
 	<tr>
 		<th>Name</th>
+		<th></th>
 	</tr>
 {% for NPC in Town.Residents.all %}
-    <tr>{{ NPC }}</tr>
+    <tr>
+    	<td>{{ NPC }}</td>
+    	<td><input type="submit" name = "{{NPC.id}}" value="Edit NPC" id ="{{NPC.id}}" /></td>
+    </tr>
 {% endfor %}	
 </table>
 
@@ -30,18 +36,20 @@
 		<th>Shop Name</th>
 		<th>Shop Type</th>
 		<th>Owner</th>
+		<th></th>
 	</tr>
 {% for shop in Town.Shops.all %}
     <tr><td>{{ shop.FirstName }} {{shop.LastName}}</td>
     <td> {{shop.Type}} </td>
     <td> {{shop.Owner}}</td>
+    <td><input type="submit" name = "{{shop.id}}" value="Edit Shop" id ="{{shop.id}}"/></td>
     </tr>
-
 {% endfor %}
 </table>
+</form>
+
 <form action="{% url 'Towns:Towndetail' Town.id %}" method="post">
 {% csrf_token %}
-
 {% for s in Town.Shops.all %}
 <h2>{{s.FirstName}} {{s.LastName}}</h2>
 <h3>Balance: {{s.Balance}}</h3>
