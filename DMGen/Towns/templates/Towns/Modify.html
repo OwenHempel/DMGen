@@ -11,5 +11,8 @@
 {% if title %} &rsaquo;  {{ title }}{% endif %}
 </div>
 {% endblock %}
-
-<h1>Generate Town</h1>
+<form action="{% url 'Towns:Modify'%}" method="post">
+<h1>Modify</h1>
+{{form}}
+<input type="submit" value="Save" />
+</form>

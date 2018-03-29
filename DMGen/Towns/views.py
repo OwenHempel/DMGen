@@ -20,18 +20,23 @@ def modify(request):
     context['title'] = 'Modify World Info'
     template_name = 'Towns/Modify.html'
     if request.method == 'POST':
-        if 'NPC' in request.POST:
-            npcid = request.POST['NPC']
-            instance = get_object_or_404(NPC, id=npcid)
-            form = NPCForm(instance = instance)
-        elif 'Shop' in request.POST:
-            sid = request.POST['Shop']
-            instance = get_object_or_404(Shop, id=sid)
-            form = ShopForm(instance = instance)
-        elif 'Town' in request.POST:
-            tid = request.POST['Town']
-            instance = get_object_or_404(Town, id=tid)
-            form = TownForm(instance = instance)
+        if 'Save' in request.POST:
+            
+        else:    
+            iDict = request.POST.dict()
+            iDict.pop('csrfmiddlewaretoken')
+            if 'Edit NPC' in iDict.values():
+                npcid = int(list(iDict.keys())[0])
+                instance = get_object_or_404(NPC, id=npcid)
+                form = NPCForm(instance = instance)
+            elif 'Edit Shop' in iDict.values():
+                sid = int(list(iDict.keys())[0])
+                instance = get_object_or_404(Shop, id=sid)
+                form = ShopForm(instance = instance)
+            elif 'Edit Town' in iDict.values():
+                tid = int(list(iDict.keys())[0])
+                instance = get_object_or_404(Town, id=tid)
+                form = TownForm(instance = instance)
     context['form'] = form
     return render(request, template_name, context)       
     
