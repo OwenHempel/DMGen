@@ -4,15 +4,16 @@
 {% block extrastyle %}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 {% endblock %}
-{% csrf_token %}
+
 {% block breadcrumbs %}
 <div class="breadcrumbs">
 <a href="{% url 'Towns:index' %}">{{'Town List'}}</a>
 {% if title %} &rsaquo;  {{ title }}{% endif %}
 </div>
 {% endblock %}
-<form action="{% url 'Towns:Modify'%}" method="post">
-<h1>Modify</h1>
-{{form}}
-<input type="submit" value="Save" />
+<form action="{% url 'Towns:ModifyShop' sid%}" method="post">
+{% csrf_token %}
+<h1>Modify {{instance}}</h1>
+{{form.as_ul}}
+<input type="submit" value="Save" name="{{id}}"/>
 </form>

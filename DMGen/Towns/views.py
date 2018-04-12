@@ -15,30 +15,54 @@ def TownList(request):
     context['title'] = 'List of Towns'
     return render(request, template_name, context)
 
-def modify(request):
+def modifyNPC(request, npcid):
     context = {}
+    context['npcid'] = npcid
     context['title'] = 'Modify World Info'
-    template_name = 'Towns/Modify.html'
+    template_name = 'Towns/ModifyNPC.html'
+    instance = get_object_or_404(NPC, id=npcid)
+    context['instance'] = instance
     if request.method == 'POST':
-        if 'Save' in request.POST:
-            
-        else:    
-            iDict = request.POST.dict()
-            iDict.pop('csrfmiddlewaretoken')
-            if 'Edit NPC' in iDict.values():
-                npcid = int(list(iDict.keys())[0])
-                instance = get_object_or_404(NPC, id=npcid)
-                form = NPCForm(instance = instance)
-            elif 'Edit Shop' in iDict.values():
-                sid = int(list(iDict.keys())[0])
-                instance = get_object_or_404(Shop, id=sid)
-                form = ShopForm(instance = instance)
-            elif 'Edit Town' in iDict.values():
-                tid = int(list(iDict.keys())[0])
-                instance = get_object_or_404(Town, id=tid)
-                form = TownForm(instance = instance)
+        form = NPCForm(request.POST, instance = instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('Towns:index', args = ('')))
+    else:
+        form = NPCForm(instance = instance)
     context['form'] = form
-    return render(request, template_name, context)       
+    return render(request, template_name, context) 
+    
+def modifyTown(request, tid):
+    context = {}
+    context['tid'] = tid
+    context['title'] = 'Modify World Info'
+    template_name = 'Towns/ModifyTown.html'
+    instance = get_object_or_404(Shop, id=tid)
+    context['instance'] = instance
+    form = TownForm(instance = instance)
+    if request.method == 'POST':
+        form = TownForm(request.POST, instance = instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('Towns:index', args = ('')))
+    context['form'] = form
+    return render(request, template_name, context) 
+
+def modifyShop(request, sid):
+    context = {}
+    context['sid'] = sid
+    context['title'] = 'Modify World Info'
+    template_name = 'Towns/ModifyShop.html'
+    instance = get_object_or_404(Shop, id=sid)
+    context['instance'] = instance
+    form = ShopForm(instance = instance)
+    if request.method == 'POST':
+        form = ShopForm(request.POST, instance = instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('Towns:index', args = ('')))
+    context['form'] = form
+    return render(request, template_name, context) 
     
 def Generate(request):
     context = {}
