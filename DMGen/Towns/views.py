@@ -24,21 +24,22 @@ def randomizeTown(request):
         R = random.choice(Race.objects.all())
         A = random.choice(Age.objects.all())
         G = random.choice(Gender.objects.all().exclude(GenderText = 'Genderless'))
-        print(R,A,G)
         FN = random.choice(Name.objects.all().filter(Race = R, Gender = G, Position = 1))
         try:
             LN = random.choice(Name.objects.all().filter(Race = R, Position = 2))
+            N = NPC(Race = R, Age = A, Gender = G, LastName = LN, FirstName = FN)
         except:
-            pass
-        N = NPC(Race = R, Age = A, Gender = G, LastName = LN, FirstName = FN)
+            N = NPC(Race = R, Age = A, Gender = G, FirstName = FN)
+        
         residents.append(N)
         rforms.append(NPCForm(instance = N))
     for i in range(nShops):
         T = random.choice(ShopType.objects.all())
         B = int(random.gauss(1000, 500))
+        O = random.choice(residents)
         FN = random.choice(ShopName.objects.all().filter(Type = T, Position = 1))
         LN = random.choice(ShopName.objects.all().filter(Type = T, Position = 2))
-        S = Shop(Type = T, Balance = B, FirstName = FN, LastName = LN)
+        S = Shop(Type = T, Balance = B, FirstName = FN, LastName = LN, Owner = O)
         shops.append(S)
         sforms.append(ShopForm(instance = S))
 
