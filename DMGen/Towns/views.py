@@ -5,8 +5,66 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 
-from .models import Town, Shop, NPC, Item
+from .models import *
 from .forms import TownForm, NPCForm, ItemForm, ShopForm
+
+import random
+
+def randomizeTown(request):
+    context = {}
+    context['title'] = 'Randomly Generated Town'
+    template_name = 'Towns/Randomize.html'
+    nShops = int(random.gauss(4,1))
+    nresidents = int(random.randrange(nShops,10))
+    shops = []
+    residents = []
+    rforms = []
+    sforms = []
+    for i in range(nresidents):
+        R = random.choice(Race.objects.all())
+        A = random.choice(Age.objects.all())
+        G = random.choice(Gender.objects.all().exclude(GenderText = 'Genderless'))
+        print(R,A,G)
+        FN = random.choice(Name.objects.all().filter(Race = R, Gender = G, Position = 1))
+        try:
+            LN = random.choice(Name.objects.all().filter(Race = R, Position = 2))
+        except:
+            pass
+        N = NPC(Race = R, Age = A, Gender = G, LastName = LN, FirstName = FN)
+        residents.append(N)
+        rforms.append(NPCForm(instance = N))
+    for i in range(nShops):
+        T = random.choice(ShopType.objects.all())
+        B = int(random.gauss(1000, 500))
+        FN = random.choice(ShopName.objects.all().filter(Type = T, Position = 1))
+        LN = random.choice(ShopName.objects.all().filter(Type = T, Position = 2))
+        S = Shop(Type = T, Balance = B, FirstName = FN, LastName = LN)
+        shops.append(S)
+        sforms.append(ShopForm(instance = S))
+
+    context['rForms'] = rforms
+    context['sForms'] = sforms
+    return render(request, template_name, context)
+
+
+
+def Towndetail(request, town_id):
+    context = {}
+    context['title'] = 'Town Details'
+    template_name = 'Towns/TownDetail.html'
+    sTown = get_object_or_404(Town, pk=town_id)
+    if request.method == 'POST':
+        iDict = request.POST.dict()
+        iDict.pop('csrfmiddlewaretoken')
+        for i in iDict:
+            shop = Shop.objects.get(id = int(iDict[i]))
+            item = Item.objects.get(id = int(i))
+            shop.Inventory.remove(item)
+            shop.Balance += item.Cost
+            shop.save()
+
+    context['Town'] = sTown
+    return render(request, template_name, context)
 
 def TownList(request):
     template_name = 'Towns/TownList.html'
@@ -107,22 +165,5 @@ def Generate(request):
     context['title'] = 'Generate World Info'
 
     return render(request, template_name, context)
-
-def Towndetail(request, town_id):
-    context = {}
-    context['title'] = 'Town Details'
-    sTown = get_object_or_404(Town, pk=town_id)
-    if request.method == 'POST':
-        iDict = request.POST.dict()
-        iDict.pop('csrfmiddlewaretoken')
-        for i in iDict:
-            shop = Shop.objects.get(id = int(iDict[i]))
-            item = Item.objects.get(id = int(i))
-            shop.Inventory.remove(item)
-            shop.Balance += item.Cost
-            shop.save()
-
-    context['Town'] = sTown
-    return render(request, 'Towns/TownDetail.html', context)
 
 

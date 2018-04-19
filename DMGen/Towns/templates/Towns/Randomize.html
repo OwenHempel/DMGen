@@ -1,0 +1,33 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static 'admin/css/base.css' %}{% endblock %}">
+<title>{% block title %}{{ title }} | {{ site_title|default:_('DM Generator Web Edition') }}{% endblock %}</title>
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'Towns:index' %}">{{'Town List'}}</a>
+{% if title %} &rsaquo;  {{ title }}{% endif %}
+</div>
+{% endblock %}
+
+<h1>Randomly Generated Town</h1>
+
+<h2>Residents</h2>
+<table>
+<tr>
+{% for f in rForms %}
+<td><table>{{f}}</table></td>
+{% endfor %}
+</tr>
+</table>
+
+<h2>Shops</h2>
+<table>
+<tr>
+{% for f in sForms %}
+<td><table>{{f}}</table></td>
+{% endfor %}
+</tr>
+</table>

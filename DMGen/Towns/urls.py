@@ -8,5 +8,6 @@ urlpatterns = [
     path('<int:town_id>/', views.Towndetail, name='Towndetail'),
     path('Generate/', views.Generate, name='Generate'),
     path('Modify/NPC/<int:npcid>', views.modifyNPC, name = 'ModifyNPC'),
-    path('Modify/Shop/<int:sid>', views.modifyShop, name = 'ModifyShop')
+    path('Modify/Shop/<int:sid>', views.modifyShop, name = 'ModifyShop'),
+    path('Randomize/', views.randomizeTown, name = 'Randomize')
 ]
